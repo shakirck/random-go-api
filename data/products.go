@@ -4,14 +4,23 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"regexp"
 	"time"
 
 	"github.com/go-playground/validator/v10"
 )
 
+// swagger:model
 type Product struct {
-	ID          int     `json:"id"`
+	// the id of the product
+	//
+	// required: true
+	// min: 1
+	ID int `json:"id"`
+	// the name of the product
+	//
+	// required: true
 	Name        string  `josn:"name" validate:"required"`
 	Description string  `json:"description"`
 	Price       float32 `json:"price" validate:"gt=0"`
@@ -70,10 +79,19 @@ func UpdateProduct(id int, p *Product) error {
 	ProductList[pos] = p
 	return nil
 }
+func DeleteProduct(id int) error {
+	_, pos, err := findProduct(id)
+	if err != nil {
+		return err
+	}
+	ProductList = append(ProductList[:pos], ProductList[pos+1:]...)
+	return nil
+}
 
 var ErrorProductNotFound = fmt.Errorf("Product Not Found")
 
 func findProduct(id int) (*Product, int, error) {
+	log.Println(id)
 	for i, p := range ProductList {
 		if p.ID == id {
 			return p, i, nil

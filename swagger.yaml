@@ -1,0 +1,73 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  Product:
+    properties:
+      Name:
+        description: the name of the product
+        type: string
+      description:
+        type: string
+        x-go-name: Description
+      id:
+        description: the id of the product
+        format: int64
+        minimum: 1
+        type: integer
+        x-go-name: ID
+      price:
+        format: float
+        type: number
+        x-go-name: Price
+      sku:
+        type: string
+        x-go-name: SKU
+    required:
+    - id
+    - Name
+    type: object
+    x-go-package: github.com/shakirck/go-micor/data
+info:
+  version: 1.0.0
+paths:
+  /products:
+    get:
+      description: Returns a list of product
+      operationId: listProducts
+      responses:
+        "200":
+          $ref: '#/responses/productsResponse'
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      description: Delete a Product from database
+      operationId: deleteProduct
+      parameters:
+      - description: the id of the produc to be deleted form the database
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "200":
+          $ref: '#/responses/noContent'
+      tags:
+      - products
+produces:
+- application/josn
+responses:
+  noContent:
+    description: ""
+  productsResponse:
+    description: A list of prodcuts returs in the response
+    schema:
+      items:
+        $ref: '#/definitions/Product'
+      type: array
+schemes:
+- http
+swagger: "2.0"

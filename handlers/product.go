@@ -1,3 +1,17 @@
+// Package classification of Product API
+//
+// Documentation for PRoudcuct API
+
+// Schemes: http
+// BasePath: /
+// Version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/josn
+// swagger:meta
 package handlers
 
 import (
@@ -5,55 +19,35 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
-	"github.com/gorilla/mux"
 	"github.com/shakirck/go-micor/data"
 )
 
+// A list of prodcuts returs in the response
+// swagger:response productsResponse
+type productsResponseWrapper struct {
+	// All products in the system
+	// in: body
+	Body []data.Product
+}
+
+// swagger:response noContent
+type prodctsNoContentWrapper struct {
+}
+
+// swagger:parameters deleteProduct
+type productIDParameterWrapper struct {
+	//the id of the produc to be deleted form the database
+	//in: path
+	//required: true
+	ID int `json:"id"`
+}
 type Products struct {
 	l *log.Logger
 }
 
 func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
-}
-
-func (p *Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
-	lp := data.GetProducts()
-	err := lp.ToJson(rw)
-	if err != nil {
-		http.Error(rw, "unable to marshal json ", http.StatusInternalServerError)
-	}
-}
-
-func (p *Products) AddProduct(rw http.ResponseWriter, r *http.Request) {
-	p.l.Println("adding product POST")
-
-	prod := r.Context().Value(KeyProduct{}).(*data.Product)
-
-	p.l.Printf("%#v", prod)
-	data.AddProduct(prod)
-
-}
-
-func (p Products) UpdateProducts(rw http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		http.Error(rw, "invalid Id ", http.StatusForbidden)
-	}
-	p.l.Println("adding product PUT", id)
-
-	prod := r.Context().Value(KeyProduct{}).(*data.Product)
-	err = data.UpdateProduct(id, prod)
-	if err == data.ErrorProductNotFound {
-		http.Error(rw, "Product Not found 1", http.StatusNotFound)
-		return
-	}
-	if err != nil {
-		http.Error(rw, "product not found 2", http.StatusInternalServerError)
-	}
 }
 
 type KeyProduct struct{}
@@ -65,7 +59,7 @@ func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 
 		err := prod.FromJson(r.Body)
 		if err != nil {
-			http.Error(rw, "Unable to Marshal ", http.StatusBadRequest)
+			http.Error(rw, "Unable to Marshal middleware ", http.StatusBadRequest)
 			return
 		}
 		err = prod.Validate()
