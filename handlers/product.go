@@ -1,17 +1,3 @@
-// Package classification of Product API
-//
-// Documentation for PRoudcuct API
-
-// Schemes: http
-// BasePath: /
-// Version: 1.0.0
-//
-// Consumes:
-// - application/json
-//
-// Produces:
-// - application/josn
-// swagger:meta
 package handlers
 
 import (
@@ -35,6 +21,9 @@ type productsResponseWrapper struct {
 type prodctsNoContentWrapper struct {
 }
 
+// swagger:response productsNoResponse
+type productsNoResponse struct{}
+
 // swagger:parameters deleteProduct
 type productIDParameterWrapper struct {
 	//the id of the produc to be deleted form the database
@@ -42,6 +31,7 @@ type productIDParameterWrapper struct {
 	//required: true
 	ID int `json:"id"`
 }
+
 type Products struct {
 	l *log.Logger
 }

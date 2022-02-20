@@ -8,6 +8,13 @@ import (
 	"github.com/shakirck/go-micor/data"
 )
 
+// swagger:route PUT / products updateProducts
+// updates a product
+//  consumes:
+//  - application/json
+// Responses:
+//  200: productsNoResponse
+
 func (p Products) UpdateProducts(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])

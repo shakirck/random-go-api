@@ -29,8 +29,29 @@ definitions:
     type: object
     x-go-package: github.com/shakirck/go-micor/data
 info:
+  description: Documentation for Product API
+  title: Product API.
   version: 1.0.0
 paths:
+  /:
+    post:
+      description: Add a product to the store
+      operationId: addProducts
+      responses:
+        "200":
+          $ref: '#/responses/productsNoResponse'
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: updates a product
+      operationId: updateProducts
+      responses:
+        "200":
+          $ref: '#/responses/productsNoResponse'
+      tags:
+      - products
   /products:
     get:
       description: Returns a list of product
@@ -61,6 +82,8 @@ produces:
 - application/josn
 responses:
   noContent:
+    description: ""
+  productsNoResponse:
     description: ""
   productsResponse:
     description: A list of prodcuts returs in the response
